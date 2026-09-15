@@ -280,6 +280,9 @@ fn check_deep_namespace_for_node(
         _ => return None,
     };
 
+    // A key with a lone surrogate cannot name a module export, so skip the check,
+    // like other computed keys that cannot be verified.
+    let name = name.as_str()?;
     if let Some(module_source) = get_module_request_name(name, module) {
         let parent_node = ctx.nodes().parent_node(node.id());
         let module_record = module.get_loaded_module(module_source.as_str())?;
